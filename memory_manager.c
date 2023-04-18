@@ -1,11 +1,3 @@
-// scp memory_manager.c ubuntu@124.222.120.167:/home/ubuntu/cse330/as3
-/*
-make clean
-make
-sudo insmod memory_manager.ko pid=1000
-sudo rmmod memory_manager
-dmesg | tail
-*/
 #include <linux/kernel.h>
 #include <linux/hrtimer.h>
 #include <linux/ktime.h>
