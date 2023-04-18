@@ -51,14 +51,15 @@ void update(struct vm_area_struct *vma,unsigned long addr,pte_t* p){
 
 	if (pte_present(value)){
 		++RSS;
-		if (ptep_test_and_clear_young(vma,addr,p))
+		if (ptep_test_and_clear_young(vma,addr,p)){
 			++WSS;
+		}
 	}
-	#if 1
-	else if (is_swap_pte(*p)) {
+	else {//if (is_swap_pte(*p)) {
 		++SWAP;
 	}
-	#endif
+	
+	//#endif
 }
 
 pte_t *pte_by_address(const struct mm_struct *const mm,
@@ -179,4 +180,4 @@ void __exit end_module(void){
 
 module_init(start_module);
 module_exit(end_module);
-MODULE_AUTHOR("Tzu Ning Chueh");
+
