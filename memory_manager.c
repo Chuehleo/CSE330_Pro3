@@ -91,10 +91,32 @@ void measure()
 //iterate through page tables of process
 void measure_pte(struct task_struct* task)
 {
-	mm_st = task->mm;	
+	mm_st = task->mm;
+	vm_area_struct *vma = mm->mmap;	
 	while (vma != NULL)
 	{
-		for (int addr = vma->vm_start; 
+		for (int addr = vma->vm_start; addr < vma->vm_end; addr++)
+		{
+			pte_t *page = pte_address(mm, addr);
+			if (pte_present(page))
+			{
+				RSS++;
+				if (ptep_test_and_clear_young(vma, addr, page))
+				{
+					WSS++;
+				}
+			}
+			else if !pte_none(pte)
+			{
+				SWAP++;
+			}
+			else
+			{
+				return;
+			}
+		}
+		vma = vma->vm_next;
+	}
 }
 
 enum hrtimer_restart no_restart_callback(struct hrtimer *timer)
