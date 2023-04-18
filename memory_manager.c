@@ -68,27 +68,30 @@ pte_t *pte_by_address(const struct mm_struct *const mm,
 	p4d_t *p4d;
 	pmd_t *pmd;
 	pud_t *pud;
-	pte_t *ptep, pte;
+	pte_t *ptep=NULL;
 	
 	pgd = pgd_offset(mm, address); // get pgd from mm and the page address
-	if (pgd_none(*pgd) || pgd_bad(*pgd)){ // check if pgd is bad or does not exist
-		return;}
-
+	
+	// check if pgd is bad or does not exist
+	if (pgd_none(*pgd) || pgd_bad(*pgd)){
+		return NULL;
+	}
+	
 	p4d = p4d_offset(pgd, address); // get p4d from from pgd and the page address
 	if (p4d_none(*p4d) || p4d_bad(*p4d)){ // check if p4d is bad or does not exist
-		return;}
-
+	return NULL;}
+	
 	pud = pud_offset(p4d, address); // get pud from from p4d and the page address
 	if (pud_none(*pud) || pud_bad(*pud)){ // check if pud is bad or does not exist
-		return;}
-
+	return NULL;}
+	
 	pmd = pmd_offset(pud, address); // get pmd from from pud and the page address
-	if (pmd_none(*pmd) || pmd_bad(*pmd)){ // check if pmd is bad or does not exist
-		return;}
-
+	if (pmd_none(*pmd) || pmd_bad(*pmd)){
+	// check if pmd is bad or does not exist
+	return NULL;}
+	
 	ptep = pte_offset_map(pmd, address); // get pte from pmd and the page address
-	if (!ptep){
-		return;}
+	return ptep;
 }
 
 void update_measure_info(struct task_struct* t){
