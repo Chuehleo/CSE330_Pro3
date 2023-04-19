@@ -55,11 +55,11 @@ void update(struct vm_area_struct *vma,unsigned long addr,pte_t* p){
 			++WSS;
 		}
 	}
-	else {//if (is_swap_pte(*p)) {
+	#if 1
+	else if (is_swap_pte(*p)) {
 		++SWAP;
 	}
-	
-	//#endif
+	#endif
 }
 
 pte_t *pte_by_address(const struct mm_struct *const mm,
